@@ -127,7 +127,7 @@
       width: 100%;
       aspect-ratio: 16/9;
       overflow: hidden;
-      background: #111;
+      background: #ffffff;
     }
     #gacha-stage #gacha-idle {
       position: absolute; inset: 0; width: 100%; height: 100%;
@@ -942,13 +942,13 @@ function loadItems() {
 
     if (!recipes.length) { el.innerHTML = '<p style="font-size:13px;color:#aaa;">交換レートがありません</p>'; return; }
 
-    var html = '<table class="sp-table"><thead><tr><th>交換内容</th><th>所持</th><th>必要</th><th></th></tr></thead><tbody>';
+    var html = '<div style="display:flex;flex-direction:column;gap:10px;">';
     recipes.forEach(function(r) {
       var have = rarityCount[r.cost_rarity] || 0;
       var cr = r.cost_rarity.toLowerCase();
       var rr = r.reward_rarity.toLowerCase();
       var isSameRarity = (r.cost_rarity === r.reward_rarity);
-      var costItems  = rarityItems[r.cost_rarity]  || [];
+      var costItems   = rarityItems[r.cost_rarity]  || [];
       var rewardItems = rarityItems[r.reward_rarity] || [];
 
       var costItemName = '';
@@ -958,41 +958,50 @@ function loadItems() {
         have = cm ? cm.count : 0;
       }
 
-      var costDisplay = costItemName
+      var costLabel = costItemName
         ? '<span class="badge-' + cr + '">' + costItemName + '</span>'
         : '<span class="badge-' + cr + '">' + r.cost_rarity + '</span>';
+      var rewardLabel = '<span class="badge-' + rr + '">' + r.reward_rarity + '</span>';
 
       var ok = have >= r.cost_count;
+      var cardBorder = ok ? '#f0d0e0' : '#eee';
 
-      // 消費元プルダウン（同レアリティ・未指定のみ）
+      // 消費元プルダウン
       var costSel = '';
       if (!r.cost_item_id && isSameRarity && costItems.length > 1) {
-        costSel = '消費: <select class="exchange-cost-select" style="width:100%;padding:4px;border:1px solid #ddd;border-radius:8px;font-size:11px;margin-bottom:4px;">';
+        costSel = '<div style="margin-top:6px;"><div style="font-size:11px;color:#888;margin-bottom:2px;">消費アイテム</div>'
+          + '<select class="exchange-cost-select" style="width:100%;padding:6px 8px;border:1px solid #ddd;border-radius:10px;font-size:13px;">';
         costItems.forEach(function(i) { costSel += '<option value="' + i.item_id + '">' + i.item_name + '</option>'; });
-        costSel += '</select>';
+        costSel += '</select></div>';
       }
-      // 交換先プルダウン（同レアリティのみ）
+      // 交換先プルダウン
       var rewardSel = '';
       if (isSameRarity && rewardItems.length > 1) {
-        rewardSel = '先: <select class="exchange-item-select" style="width:100%;padding:4px;border:1px solid #ddd;border-radius:8px;font-size:11px;margin-bottom:4px;">';
+        rewardSel = '<div style="margin-top:6px;"><div style="font-size:11px;color:#888;margin-bottom:2px;">交換先アイテム</div>'
+          + '<select class="exchange-item-select" style="width:100%;padding:6px 8px;border:1px solid #ddd;border-radius:10px;font-size:13px;">';
         rewardItems.forEach(function(i) { rewardSel += '<option value="' + i.item_id + '">' + i.item_name + '</option>'; });
-        rewardSel += '</select>';
+        rewardSel += '</select></div>';
       }
 
-      html += '<tr>'
-        + '<td>' + costDisplay + ' → <span class="badge-' + rr + '">' + r.reward_rarity + '</span></td>'
-        + '<td style="text-align:center;">' + have + '</td>'
-        + '<td style="text-align:center;">' + r.cost_count + '</td>'
-        + '<td>' + costSel + rewardSel
-        + '<button class="exchange-btn"' + (ok ? '' : ' disabled')
+      html += '<div style="background:#fff;border:1px solid ' + cardBorder + ';border-radius:14px;padding:12px 14px;">'
+        // 交換内容（矢印で一行表示）
+        + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">'
+        + '<div>' + costLabel + ' <span style="font-size:12px;color:#888;">× ' + r.cost_count + '個</span></div>'
+        + '<div style="color:#cc6699;font-size:16px;">→</div>'
+        + '<div>' + rewardLabel + ' <span style="font-size:12px;color:#888;">× 1個</span></div>'
+        + '<div style="margin-left:auto;font-size:12px;color:' + (ok ? '#080' : '#c00') + ';">所持: ' + have + '個</div>'
+        + '</div>'
+        + costSel + rewardSel
+        + '<button class="exchange-btn" style="margin-top:8px;"'
+        + (ok ? '' : ' disabled')
         + ' data-recipe-id="' + r.recipe_id + '"'
         + ' data-description="' + r.description + '"'
         + ' data-same-rarity="' + isSameRarity + '"'
         + ' data-has-cost-select="' + (!r.cost_item_id && isSameRarity && costItems.length > 1) + '"'
-        + ' onclick="handleExchange(this)">交換</button></td>'
-        + '</tr>';
+        + ' onclick="handleExchange(this)">交換する</button>'
+        + '</div>';
     });
-    el.innerHTML = html + '</tbody></table>';
+    el.innerHTML = html + '</div>';
   }
 
   api({ action:'getRecipes' }, function(err, data) { recipes = (data && data.success) ? data.recipes : []; tryRender(); });
@@ -1004,7 +1013,7 @@ function handleExchange(btn) {
   var description   = btn.getAttribute('data-description');
   var isSame        = btn.getAttribute('data-same-rarity') === 'true';
   var hasCostSelect = btn.getAttribute('data-has-cost-select') === 'true';
-  var row = btn.closest('tr');
+  var row = btn.closest('div[style]');
   var rewardItemId = null, costItemId = null;
   if (isSame) { var rs = row ? row.querySelector('.exchange-item-select') : null; if (rs) rewardItemId = rs.value; }
   if (hasCostSelect) { var cs = row ? row.querySelector('.exchange-cost-select') : null; if (cs) costItemId = cs.value; }
