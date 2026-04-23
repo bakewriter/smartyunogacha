@@ -50,11 +50,11 @@
     .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; background: #f0d0e0; color: #aa6688; transition: background 0.2s; }
     .tab-btn.active { background: linear-gradient(135deg,#ff80b0,#ffb347); color: #fff; }
 
-    /* カードステージ（フレーム画像に重ねる） */
+    /* カードステージ（フレーム画像のアスペクト比1920/1080を維持） */
     #card-stage-sp {
       position: relative;
       width: 100%;
-      margin-bottom: 8px;
+      margin: 0 auto 0;
     }
     .login-card-sp {
       position: relative;
@@ -64,23 +64,28 @@
       background-repeat: no-repeat;
       background-color: transparent;
       border: none;
-      /* PC版と同じ比率でpadding（白い入力エリアに収める） */
-      padding: 16% 38% 14% 38%;
+      /* 白い入力エリアに合わせた精度の高いpadding */
+      padding: 16% 39% 10% 39%;
       box-sizing: border-box;
       overflow: visible;
     }
-    .login-card-sp label { display: block; font-size: 1.8vw; color: #aa6688; margin-bottom: 0.3em; font-weight: bold; }
+    .login-card-sp label { display: block; font-size: 1.4vw; color: #aa6688; margin-bottom: 0.2em; font-weight: bold; }
     .login-card-sp input {
-      width: 100%; padding: 0.8vw 1vw;
-      border: 1px solid #f0c0d8; border-radius: 1.5vw;
-      font-size: 1.8vw; margin-bottom: 1vw;
+      width: 100%; padding: 0.7vw 0.9vw;
+      border: 1px solid #f0c0d8; border-radius: 1.2vw;
+      font-size: 1.5vw; margin-bottom: 0.8vw;
       background: rgba(255,255,255,0.85); color: #333; outline: none;
     }
     .login-card-sp input:focus { border-color: #ff80b0; background: rgba(255,255,255,0.95); }
-    .login-card-sp .main-btn {
-      width: 100%; padding: 1vw; border: none; border-radius: 3vw;
+    /* ボタンはフレームの外に配置 */
+    #login-btn-sp {
+      padding: 0 16px 12px;
+    }
+    #login-btn-sp .main-btn {
+      width: 100%; padding: 14px; border: none; border-radius: 24px;
       background: linear-gradient(135deg,#ff80b0,#ffb347);
-      color: #fff; font-size: 2vw; font-weight: bold; cursor: pointer;
+      color: #fff; font-size: 16px; font-weight: bold; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(255,128,176,0.35);
     }
 
     .main-btn {
@@ -305,7 +310,6 @@
       <input type="text"  id="reg-name"   placeholder="お好きな名前">
       <label>シリアルコード（BOOTHの注文番号）</label>
       <input type="text"  id="reg-serial" placeholder="注文番号">
-      <button class="main-btn" id="btn-reg" onclick="doRegister()">登録してはじめる</button>
     </div>
 
     <div id="login-card-exist" class="login-card-sp" style="display:none;">
@@ -313,8 +317,13 @@
       <input type="email" id="login-email" placeholder="登録時のメールアドレス">
       <label>ユーザー名</label>
       <input type="text"  id="login-name"  placeholder="登録時のユーザー名">
-      <button class="main-btn" id="btn-login" onclick="doLogin()">ログイン</button>
     </div>
+  </div>
+
+  <!-- ボタンはフレームの外 -->
+  <div id="login-btn-sp">
+    <button class="main-btn" id="btn-reg"   onclick="doRegister()">登録してはじめる</button>
+    <button class="main-btn" id="btn-login" onclick="doLogin()" style="display:none;margin-top:8px;">ログイン</button>
   </div>
 
   <div id="msg-login" class="msg" style="text-align:center;min-height:18px;font-size:14px;margin-top:8px;"></div>
@@ -638,6 +647,8 @@ function switchTab(tab) {
   document.getElementById('tbtn-exist').classList.toggle('active', !isNew);
   document.getElementById('login-card-new').style.display   = isNew ? 'block' : 'none';
   document.getElementById('login-card-exist').style.display = isNew ? 'none'  : 'block';
+  document.getElementById('btn-reg').style.display   = isNew ? 'block' : 'none';
+  document.getElementById('btn-login').style.display = isNew ? 'none'  : 'block';
 }
 
 function doRegister() {
