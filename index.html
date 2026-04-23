@@ -617,13 +617,7 @@ function applyGachaAssets() {
   si('ticket-icon', ASSETS.ticket_frame || ASSETS.neko);
   var snd = document.getElementById('gacha-sound');
   if (snd && ASSETS.audio) { snd.src = ASSETS.audio; }
-  // 背景フレーム画像をstageに適用
-  var stage = document.getElementById('gacha-stage');
-  if (stage && ASSETS.frame) {
-    stage.style.backgroundImage = 'url(' + ASSETS.frame + ')';
-    stage.style.backgroundSize  = 'cover';
-    stage.style.backgroundPosition = 'center';
-  }
+
 }
 
 // ============================================================
