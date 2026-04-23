@@ -1050,19 +1050,20 @@ function loadRedeemItems() {
       itemData.items.forEach(function(i){ itemMap[i.item_id] = i; });
       var redeemable = invData.inventory.filter(function(i){ return i.count > 0 && itemMap[i.item_id]; });
       if (!redeemable.length) { el.innerHTML = '<p style="font-size:13px;color:#aaa;">引き換え可能なアイテムがありません</p>'; return; }
-      var html = '<table class="sp-table"><thead><tr><th>アイテム名</th><th>種別</th><th>所持</th><th></th></tr></thead><tbody>';
+      var html = '<div style="display:flex;flex-direction:column;gap:8px;">';
       redeemable.forEach(function(inv) {
         var master = itemMap[inv.item_id];
-        var typeLabel = master.item_type === 'physical' ? '物理' : 'デジタル';
+        var typeLabel = master.item_type === 'physical' ? '物理グッズ' : 'デジタル';
         var typeColor = master.item_type === 'physical' ? '#c85000' : '#0055cc';
-        html += '<tr>'
-          + '<td><b>' + inv.item_name + '</b></td>'
-          + '<td style="text-align:center;color:' + typeColor + ';font-size:11px;font-weight:bold;">' + typeLabel + '</td>'
-          + '<td style="text-align:center;">' + inv.count + '</td>'
-          + '<td><button class="redeem-btn" data-id="' + inv.item_id + '" data-type="' + (master.item_type||'digital') + '" onclick="openRedeemForm(this.dataset.id,this.dataset.type)">引換</button></td>'
-          + '</tr>';
+        html += '<div style="background:#fff;border:1px solid #f0d0e0;border-radius:14px;padding:10px 14px;display:flex;align-items:center;gap:10px;">'
+          + '<div style="flex:1;min-width:0;">'
+          + '<div style="font-size:14px;font-weight:bold;color:#333;margin-bottom:2px;">' + inv.item_name + '</div>'
+          + '<div style="font-size:11px;font-weight:bold;color:' + typeColor + ';">' + typeLabel + ' · 所持: ' + inv.count + '個</div>'
+          + '</div>'
+          + '<button class="redeem-btn" style="flex-shrink:0;width:72px;" data-id="' + inv.item_id + '" data-type="' + (master.item_type||'digital') + '" onclick="openRedeemForm(this.dataset.id,this.dataset.type)">引き換え</button>'
+          + '</div>';
       });
-      el.innerHTML = html + '</tbody></table>';
+      el.innerHTML = html + '</div>';
     });
   });
 }
