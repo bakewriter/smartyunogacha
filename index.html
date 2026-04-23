@@ -368,7 +368,7 @@
   <!-- ガチャステージ（演出エリア） -->
   <div id="gacha-stage-wrap">
     <div id="gacha-stage">
-      <div id="gacha-idle">ガチャを引いてね！</div>
+      <div id="gacha-idle"></div>
       <video id="gacha-video" playsinline preload="none"></video>
       <div id="gacha-result-display"></div>
     </div>
@@ -611,16 +611,7 @@ function applyGachaAssets() {
   si('btn1-img',    ASSETS.btn1);
   si('btn5-img',    ASSETS.btn5);
   si('btn10-img',   ASSETS.btn11);
-  // ガチャステージのidle背景（ur_frameまたはframe）
-  if (ASSETS.ur_frame || ASSETS.frame) {
-    var idle = document.getElementById('gacha-idle');
-    if (idle) {
-      idle.style.backgroundImage = 'url(' + (ASSETS.ur_frame || ASSETS.frame) + ')';
-      idle.style.backgroundSize  = 'cover';
-      idle.style.backgroundPosition = 'center';
-      idle.textContent = '';
-    }
-  }
+  // ガチャステージのidleは何も表示しない
   si('ssr-lamp-sp', ASSETS.ssr_off);
   si('neko-fixed',  ASSETS.neko);
   si('ticket-icon', ASSETS.ticket_frame || ASSETS.neko);
