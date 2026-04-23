@@ -115,8 +115,30 @@
       border-bottom: 1px solid rgba(255,182,210,0.3);
     }
     #gacha-header h1 { font-size: 13px; color: #cc6699; margin: 0; flex: 1; }
-    #ticket-wrap { display: flex; align-items: center; gap: 6px; }
-    #ticket-icon { width: 28px; height: 28px; object-fit: contain; }
+    #ticket-wrap { display: flex; align-items: center; }
+    #ticket-bg-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #ticket-icon {
+      width: 80px; height: auto;
+      object-fit: contain; display: block;
+    }
+    #ticket-count-wrap {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      font-weight: bold;
+      color: #cc6699;
+      font-size: 14px;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+      pointer-events: none;
+    }
     #ticket-count { font-size: 18px; font-weight: bold; color: #cc6699; }
     #gacha-user-info { font-size: 11px; color: #aaa; white-space: nowrap; }
 
@@ -357,9 +379,13 @@
       <div id="gacha-user-info" style="font-size:11px;color:#aaa;"></div>
     </div>
     <div id="ticket-wrap">
-      <img id="ticket-icon" src="" alt="">
-      <span id="ticket-count">-</span>
-      <span style="font-size:11px;color:#aaa;">枚</span>
+      <div id="ticket-bg-wrap">
+        <img id="ticket-icon" src="" alt="">
+        <div id="ticket-count-wrap">
+          <span id="ticket-count">-</span>
+          <span style="font-size:10px;">枚</span>
+        </div>
+      </div>
     </div>
   </div>
 
