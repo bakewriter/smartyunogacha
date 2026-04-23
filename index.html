@@ -177,8 +177,7 @@
     }
 
     /* SSRランプ */
-    #ssr-lamp-sp { width: 40px; height: 40px; object-fit: contain; opacity: 0.45; transition: opacity 0.3s; }
-    #ssr-lamp-sp.lit { opacity: 1; filter: drop-shadow(0 0 8px #f9c); }
+    #ssr-lamp-sp.lit { opacity: 1 !important; filter: drop-shadow(0 0 8px #f9c); }
 
     /* ガチャボタン */
     #gacha-btns {
@@ -361,17 +360,18 @@
       <img id="ticket-icon" src="" alt="">
       <span id="ticket-count">-</span>
       <span style="font-size:11px;color:#aaa;">枚</span>
-      <img id="ssr-lamp-sp" src="" alt="">
     </div>
   </div>
 
   <!-- ガチャステージ（演出エリア） -->
-  <div id="gacha-stage-wrap">
+  <div id="gacha-stage-wrap" style="position:relative;">
     <div id="gacha-stage">
       <div id="gacha-idle"></div>
       <video id="gacha-video" playsinline preload="none"></video>
       <div id="gacha-result-display"></div>
     </div>
+    <!-- SSRランプ：ステージ左下 -->
+    <img id="ssr-lamp-sp" src="" alt="" style="position:absolute;bottom:6px;left:6px;width:40px;height:40px;object-fit:contain;opacity:0.45;transition:opacity 0.3s,filter 0.3s;z-index:5;pointer-events:none;">
   </div>
 
   <!-- ガチャボタン -->
