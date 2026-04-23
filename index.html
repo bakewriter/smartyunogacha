@@ -561,7 +561,8 @@ function loadAssets(cb) {
     if (!err && data && data.success && data.settings) {
       var s = data.settings;
       if (s.gacha_video_id)       GACHA_VIDEO_FILE_ID  = s.gacha_video_id;
-      if (s.fs_video_id)          FS_VIDEO_FILE_ID     = s.fs_video_id;
+      // スマホ用FSビデオIDが設定されていればそちらを優先、なければPC版と同じIDを使用
+      FS_VIDEO_FILE_ID = s.fs_video_id_sp || s.fs_video_id || '';
       if (s.fs_trigger_rarities)  FS_TRIGGER_RARITIES  = s.fs_trigger_rarities;
       if (s.ssr_trigger_rarities) SSR_TRIGGER_RARITIES = s.ssr_trigger_rarities;
       SSR_EFFECT_ENABLED = s.ssr_effect_enabled !== false;
