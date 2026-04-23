@@ -472,7 +472,7 @@
 </div>
 
 <!-- ネコ固定ボタン（常時右下表示） -->
-<img id="neko-fixed" src="" alt="BOOTH" onclick="window.open('https://yunosp.booth.pm/','_blank')">
+<img id="neko-fixed" src="" alt="BOOTH" onclick="window.open('https://yunosp.booth.pm/','_blank')" style="display:none;">
 
 <script>
 
@@ -540,6 +540,8 @@ function showScreen(name) {
   var target = document.getElementById('screen-' + name);
   if (target) target.classList.add('active');
   window.scrollTo(0, 0);
+  var neko = document.getElementById('neko-fixed');
+  if (neko) neko.style.display = (name === 'gacha') ? 'block' : 'none';
 }
 
 // ============================================================
