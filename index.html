@@ -472,7 +472,7 @@
 </div>
 
 <!-- ネコ固定ボタン（常時右下表示） -->
-<img id="neko-fixed" src="" alt="BOOTH" onclick="window.open('https://yunosp.booth.pm/','_blank')" style="display:none;">
+<img id="neko-fixed" src="" alt="BOOTH" onclick="window.open('https://yunosp.booth.pm/items/8235061','_blank')" style="display:none;">
 
 <script>
 
@@ -1147,10 +1147,12 @@ function submitRedeem() {
   api({ action:'redeemItem', user_id:currentUser.user_id, item_id:currentRedeemItem.item_id, item_type:currentRedeemItem.item_type, email:'', selected_file_id:selectedFileId, selected_label:selectedLabel }, function(err, data) {
     if (err || !data.success) { msgEl.style.color = '#c00'; msgEl.textContent = '失敗: ' + (data ? data.message : err); return; }
     document.getElementById('redeem-form-wrap').style.display = 'none';
+    msgEl.style.color = '#080';
     if (data.download_url) {
-      msgEl.innerHTML = data.message + '<br><a href="' + data.download_url + '" target="_blank" style="display:inline-block;margin-top:10px;padding:10px 20px;background:linear-gradient(135deg,#ff80b0,#ffb347);color:#fff;border-radius:20px;font-weight:bold;text-decoration:none;font-size:14px;">ダウンロードする</a>';
+      msgEl.innerHTML = '<b>' + data.message + '</b><br>'
+        + '<a href="' + data.download_url + '" target="_blank" style="display:inline-block;margin-top:10px;padding:10px 20px;background:linear-gradient(135deg,#ff80b0,#ffb347);color:#fff;border-radius:20px;font-weight:bold;text-decoration:none;font-size:14px;">ダウンロードする</a>';
     } else {
-      msgEl.style.color = '#080'; msgEl.textContent = data.message;
+      msgEl.textContent = data.message;
     }
     currentRedeemItem = null;
     loadRedeemItems();
