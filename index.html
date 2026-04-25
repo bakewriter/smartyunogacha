@@ -1121,7 +1121,6 @@ function openRedeemForm(itemId, itemType) {
   wrap.style.display = 'block';
   msgEl.textContent = '';
   if (choiceWrap) { choiceWrap.innerHTML = ''; choiceWrap.style.display = 'none'; }
-  // デジタルアイテムの場合、選択肢があるか確認
   if (itemType === 'digital') {
     api({ action: 'getVoiceChoices', item_id: itemId }, function(err, data) {
       if (!err && data && data.success && data.choices && data.choices.length > 0) {
