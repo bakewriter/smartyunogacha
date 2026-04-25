@@ -966,18 +966,23 @@ function loadItems() {
   if (!el) return;
   el.innerHTML = '<p style="font-size:13px;color:#999;">読み込み中...</p>';
 
-  var recipes = null, inventory = null;
+  var recipes = null, inventory = null, allItems = null;
 
   function tryRender() {
-    if (recipes === null || inventory === null) return;
+    if (recipes === null || inventory === null || allItems === null) return;
     var rarityCount = {};
     var rarityItems = {};
     var itemMasterMap = {};
+    var allItemsByRarity = {};
     inventory.forEach(function(item) {
       rarityCount[item.rarity] = (rarityCount[item.rarity] || 0) + item.count;
       if (!rarityItems[item.rarity]) rarityItems[item.rarity] = [];
       rarityItems[item.rarity].push(item);
       itemMasterMap[item.item_id] = item;
+    });
+    allItems.forEach(function(item) {
+      if (!allItemsByRarity[item.rarity]) allItemsByRarity[item.rarity] = [];
+      allItemsByRarity[item.rarity].push(item);
     });
 
     if (!recipes.length) { el.innerHTML = '<p style="font-size:13px;color:#aaa;">交換レートがありません</p>'; return; }
@@ -989,7 +994,7 @@ function loadItems() {
       var rr = r.reward_rarity.toLowerCase();
       var isSameRarity = (r.cost_rarity === r.reward_rarity);
       var costItems   = rarityItems[r.cost_rarity]  || [];
-      var rewardItems = rarityItems[r.reward_rarity] || [];
+      var rewardItems = (allItemsByRarity[r.reward_rarity] || []).filter(function(item) { return !r.cost_item_id || item.item_id !== r.cost_item_id; });
 
       var costItemName = '';
       if (r.cost_item_id) {
