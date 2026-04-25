@@ -451,9 +451,8 @@
     <h2>アイテム引き換え</h2>
     <div id="redeem-list"></div>
     <div id="redeem-form-wrap" style="display:none;margin-top:12px;">
-      <h3 style="font-size:13px;margin:0 0 8px;color:#555;">メールアドレスを確認</h3>
-      <input type="email" id="redeem-email" placeholder="メールアドレス">
-      <button class="add-btn" onclick="submitRedeem()">引き換え申請する</button>
+      <h3 style="font-size:13px;margin:0 0 8px;color:#555;">引き換えを確定しますか？</h3>
+      <button class="add-btn" onclick="submitRedeem()">引き換える</button>
     </div>
     <div id="msg-redeem" class="msg"></div>
     <div style="margin-top:16px;">
@@ -1127,13 +1126,21 @@ function openRedeemForm(itemId, itemType) {
 function submitRedeem() {
   if (!currentRedeemItem) return;
   var msgEl = document.getElementById('msg-redeem');
-  var email = document.getElementById('redeem-email').value.trim();
-  if (!email) { msgEl.style.color = '#c00'; msgEl.textContent = 'メールアドレスを入力してください'; return; }
   msgEl.style.color = '#888'; msgEl.textContent = '申請中...';
-  api({ action:'redeemItem', user_id:currentUser.user_id, item_id:currentRedeemItem.item_id, item_type:currentRedeemItem.item_type, email:email }, function(err, data) {
+  api({ action:'redeemItem', user_id:currentUser.user_id, item_id:currentRedeemItem.item_id, item_type:currentRedeemItem.item_type, email:'' }, function(err, data) {
     if (err || !data.success) { msgEl.style.color = '#c00'; msgEl.textContent = '失敗: ' + (data ? data.message : err); return; }
     msgEl.style.color = '#080'; msgEl.textContent = data.message;
     document.getElementById('redeem-form-wrap').style.display = 'none';
+    // デジタルアイテムはダウンロードURLが返ってくれば自動ダウンロード
+    if (data.download_url) {
+      var a = document.createElement('a');
+      a.href = data.download_url;
+      a.target = '_blank';
+      a.download = '';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
     currentRedeemItem = null;
     loadRedeemItems();
     loadRedeemHistory();
