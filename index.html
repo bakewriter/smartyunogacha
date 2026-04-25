@@ -1046,6 +1046,7 @@ function loadItems() {
 
   api({ action:'getRecipes' }, function(err, data) { recipes = (data && data.success) ? data.recipes : []; tryRender(); });
   api({ action:'getInventory', user_id:currentUser.user_id }, function(err, data) { inventory = (data && data.success) ? data.inventory : []; tryRender(); });
+  api({ action:'getItems' }, function(err, data) { allItems = (data && data.success) ? data.items : []; tryRender(); });
 }
 
 function handleExchange(btn) {
