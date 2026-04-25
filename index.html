@@ -1146,17 +1146,11 @@ function submitRedeem() {
   var selectedLabel  = (voiceSel && voiceSel.selectedIndex >= 0 && voiceSel.options[voiceSel.selectedIndex]) ? (voiceSel.options[voiceSel.selectedIndex].getAttribute('data-label') || '') : '';
   api({ action:'redeemItem', user_id:currentUser.user_id, item_id:currentRedeemItem.item_id, item_type:currentRedeemItem.item_type, email:'', selected_file_id:selectedFileId, selected_label:selectedLabel }, function(err, data) {
     if (err || !data.success) { msgEl.style.color = '#c00'; msgEl.textContent = '失敗: ' + (data ? data.message : err); return; }
-    msgEl.style.color = '#080'; msgEl.textContent = data.message;
     document.getElementById('redeem-form-wrap').style.display = 'none';
-    // デジタルアイテムはダウンロードURLが返ってくれば自動ダウンロード
     if (data.download_url) {
-      var a = document.createElement('a');
-      a.href = data.download_url;
-      a.target = '_blank';
-      a.download = '';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      msgEl.innerHTML = data.message + '<br><a href="' + data.download_url + '" target="_blank" style="display:inline-block;margin-top:10px;padding:10px 20px;background:linear-gradient(135deg,#ff80b0,#ffb347);color:#fff;border-radius:20px;font-weight:bold;text-decoration:none;font-size:14px;">ダウンロードする</a>';
+    } else {
+      msgEl.style.color = '#080'; msgEl.textContent = data.message;
     }
     currentRedeemItem = null;
     loadRedeemItems();
